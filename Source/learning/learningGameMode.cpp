@@ -39,19 +39,34 @@ void AlearningGameMode::BeginPlay()
 	}
 	// open main menu
 	// must set "startingwidgetclass" in editor to MainMenu
+	// this is a part of the subclass made from GameModeBase that is your games
+	// main game mode bp/class, it will have the name of your project.
+	// you double click it if its a BP
+	// in the default editor setup it will be visible from the start in the sidebar 
 	ChangeMenuWidget(StartingWidgetClass);
 	// game is aware of the user being in main menu
 	SetCurrentState(EGamePlayState::EInMainMenu);
 
+	// this line "casts" (converts in a sense) the result of GetPlayerPawn() to a game character
+	// it needs error checking and handling from an "if" control loop in case of failure
 	//PlayerCharacter = Cast<AlearningCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
 
 
 }
+/*=============================================================================
+	GAME STATE FUNCTIONS
 
+	Using the declared Enum EGamePlayState, you can control how the game
+	operates during specific moments, defining custom behavior when the player
+	does things like enters cheat commands in the console. Or is in the main
+	Menu, dies,
+=============================================================================*/
 /*Returns the current state of gameplay
 e.g. Paused, playing, dead, cheating, game over, game not started yet
 
 States are declared in the enum class EGamePlayState
+
+TODO: This function needs to be put in a main control loop, possibly several different control loops
 */
 EGamePlayState AlearningGameMode::GetCurrentState() const
 {
@@ -77,6 +92,13 @@ void AlearningGameMode::HandleNewState(EGamePlayState NewState)
 		// do nothing
 	}
 	break;
+	case EGamePlayState::EInMainMenu:
+		{
+			// if the character is in the main menu, we want to disable player input
+			// so they cannot fire or move
+			// this doesnt work?
+			//Cast<AMainPlayerController>(GetController())->Enable();
+		}
 	//case EGamePlayState::EDead:
 	//{
 	//RespawnPlayer()

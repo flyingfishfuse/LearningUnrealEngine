@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "Blueprint/UserWidget.h"
+#include "MainPlayerController.h"
 #include "learningGameMode.generated.h"
 
 /*enum to store the current state of gameplay*/
