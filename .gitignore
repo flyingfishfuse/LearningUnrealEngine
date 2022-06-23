@@ -1,0 +1,10 @@
+.git/
+.idea/
+.vs/
+/Docs/
+/Binaries/
+/Saved/
+/Intermediate/
+learning.sln
+learning.Uproject
+/DerivedDataCache/
