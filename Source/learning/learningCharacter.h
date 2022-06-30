@@ -66,6 +66,13 @@ protected:
 public:
 	AlearningCharacter();
 
+
+/*=============================================================================
+	UMG
+=============================================================================*/
+	//UFUNCTION(BlueprintCallable, Category = "HUD")
+	//class AHUD* GetHUD() const;
+
 protected:
 	virtual void BeginPlay();
 

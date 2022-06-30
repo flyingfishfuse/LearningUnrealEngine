@@ -106,7 +106,12 @@ void AlearningCharacter::BeginPlay()
 		Mesh1P->SetHiddenInGame(false, true);
 	}
 }
-
+//AHUD* AlearningCharacter::GetHUD() const
+//{
+//	APlayerController* Controller = Cast<APlayerController>(GetController());
+//
+//	return Controller->GetHUD();
+//}
 /*=============================================================================
 Respawning Mechanics
 =============================================================================*/

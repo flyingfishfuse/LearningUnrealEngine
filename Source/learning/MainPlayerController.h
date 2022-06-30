@@ -15,7 +15,7 @@ class LEARNING_API AMainPlayerController : public APlayerController
 	GENERATED_BODY()
 public:
 	virtual void BeginPlay() override;
-
+/*
 protected:
 	void AMainPlayerController::Disable()
 	{
@@ -26,4 +26,5 @@ protected:
 	{
 		EnableInput(Cast<APlayerController>(this));
 	}
+	*/
 };
