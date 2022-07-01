@@ -87,13 +87,23 @@ static const char * EGamePlayStateStrings[] = { "EPlaying",
 
 /*
  * Maps EGamePlayState to strings describing the enum value names
- * This is used for debugging, output formatting, and easier logging 
+ * This is used for debugging, output formatting, and easier logging
+ * Calls by index so input is an int
+ *
+ * Used to tie BluePrints to code
  */
-inline const char * GetGameStateString( int enumVal )
+inline const char * GetGameStateString( EGamePlayState EnumMember)
 {
-	return EGamePlayStateStrings[enumVal];
+	const int IndexOfEnum =  int(EnumMember);
+	return EGamePlayStateStrings[IndexOfEnum];
 }
-
+/*
+ * Gets eGamePlayState by index
+ */
+//inline int GetEnumGamePlayStateByIndex(int EnumIndex)
+//{
+//	return static_cast<EGamePlayState>(EnumIndex);
+//}
 /*
  * Magic numbers! YAY!
  * I couldnt get anyone to help me figure out how to get a reference to

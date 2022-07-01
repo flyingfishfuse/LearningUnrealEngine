@@ -41,14 +41,14 @@ public:
 	AlearningCharacter();
 
 protected:
-	virtual void BeginPlay();
+	virtual void BeginPlay() override;
 	/*
 	In this declaration, the Destroyed method is marked with virtual because 
 	the Character class inherits from the Actor class, which contains its 
 	own destroyed method.
 	*/
 	//Called when our Actor is destroyed during Gameplay.
-	virtual void Destroyed();
+	virtual void Destroyed() override;
 
 	//Call Gamemode class to Restart Player Character.
 	void CallRestartPlayer();

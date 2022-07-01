@@ -26,6 +26,7 @@ AlearningGameMode::AlearningGameMode()
 	// use our custom HUD class
 	HUDClass = AlearningHUD::StaticClass();
 }
+
 /*
 This function is run when the game starts.
 
@@ -53,6 +54,9 @@ void AlearningGameMode::BeginPlay()
 	// right when the player starts playing
 	// its using our custom function that allows us to avoid too many lines of code
 	APlayerController* PlayerController = AlearningGameMode::GetFirstPlayerController();
+	// this line "casts" (converts in a sense) the result of GetPlayerPawn() to a game character
+	// it needs error checking and handling from an "if" control loop in case of failure
+	//FirstPlayerCharacter = Cast<AlearningCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
 
 	// open main menu
 	// must set "startingwidgetclass" in editor to MainMenu
@@ -72,12 +76,22 @@ void AlearningGameMode::BeginPlay()
 	//UE_LOG(LogBasic, Warning, TEXT(""));
 	SetCurrentState(EGamePlayState::EInMainMenu);
 
-	// this line "casts" (converts in a sense) the result of GetPlayerPawn() to a game character
-	// it needs error checking and handling from an "if" control loop in case of failure
-	//PlayerCharacter = Cast<AlearningCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
+	//==========================================================================
+	// STOP!!
+	// READ!!
+	//==========================================================================
+	// this is when the player selects whether they wish to load a game, or start a new game
+	// From now on, program flow is glued together with blueprints calling code!
+	// Now we begin creating game play elements in the editor and defining interactions
+	// between chunks of code, with specific blueprints
 
+	// these blueprints could be tied to locations, objects, actions in the game world
+	// those interactions need code to function!
+
+	// this is where it gets WAY more META
 
 }
+
 /*=============================================================================
 	GAME STATE FUNCTIONS
 
@@ -98,6 +112,7 @@ EGamePlayState AlearningGameMode::GetCurrentState() const
 	UE_LOG(LogBasic,Warning,TEXT("Getting current Game State"))
 	return CurrentState;
 }
+
 /*
 Sets a new gameplay state from an item in the enum EGamePlayState
 */
@@ -127,7 +142,8 @@ Use the index value of the following enum values
 */
 void AlearningGameMode::BPSetCurrentState(int NewState)
 {
-	UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::BPSetCurrentState -> %hs"),GetGameStateString(NewState)); 
+	// not functional yet >>> GetGameStateString(int NewState)
+	//UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::BPSetCurrentState -> %hs"),GetGameStateString(NewState)); 
 	switch (NewState)
 	{
 	case 0:
@@ -156,6 +172,8 @@ void AlearningGameMode::BPSetCurrentState(int NewState)
 	break;
 	}
 }
+
+
 /*
 Main control flow for handling gameplay states
 */
@@ -167,6 +185,7 @@ void AlearningGameMode::HandleNewState(EGamePlayState NewState)
 	case EGamePlayState::EPlaying:
 	{
 		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] GameState Passed to AlearningGameMode::HandleNewState == EGamePlayState::Playing"))
+			UE_LOG(LogBasic,Warning,TEXT("[DEBUG] Player Is Playing Game!"))
 		// Enable Input in the main control flow
 		//ReEnableFirstPlayerController();
 		// do nothing
@@ -201,6 +220,8 @@ void AlearningGameMode::HandleNewState(EGamePlayState NewState)
 		// do nothing currently
 	}
 }
+
+
 /*
 Jumps the player to a different level starting point
 */
@@ -209,6 +230,8 @@ void AlearningGameMode::JumptoLevel(const FString& LevelName)
 	UE_LOG(LogBasic,Warning,TEXT("[DEBUG]AlearningGameMode::JumptoLevel %ls"),*LevelName);
 	UGameplayStatics::OpenLevel(this, FName(*LevelName), false);
 }
+
+
 /*
 Restarts the current level
 */
@@ -218,6 +241,7 @@ void AlearningGameMode::RestartLevel()
 	UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::RestartLevel"));
 	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 }
+
 
 /*
 RestartPlayer is a method that already exists within the GameModeBase class.
@@ -232,6 +256,8 @@ void AlearningGameMode::RespawnPlayer(AController* NewPlayer)
 	AGameModeBase::RestartPlayer(NewPlayer);
 
 }
+
+
 /*
 Action to perform when player dies
 */
@@ -243,6 +269,7 @@ void AlearningGameMode::PlayerDied(ACharacter* Character)
 	AController* CharacterController = Character->GetController();
 	RespawnPlayer(CharacterController);
 }
+
 
 /*
 Get a reference to the First Players Controller
@@ -256,6 +283,8 @@ APlayerController* AlearningGameMode::GetFirstPlayerController()
 	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 	return PlayerController;
 }
+
+
 /*
  * Disables Controller Input for whatever reason you need
  * Created initially for preventing firing the weapon in the menu
@@ -271,6 +300,8 @@ void AlearningGameMode::DisableFirstPlayerController()
 	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 	PlayerPawn->DisableInput(PlayerController);
 }
+
+
 /*
  * Re Enables Inpuit For whatever reason you need
  * Initially created for Re Enabling Input after leaving menu
@@ -307,6 +338,7 @@ only available client side.
 //	AlearningHUD* MyHUD = GetWorld()->GetFirstPlayerController()->GetHUD();
 //}
 
+
 /*
  * Gets the reference to a Blueprint UserWidget
  * Primarily used in the ChangeMenuWidget() function to set game state
@@ -331,6 +363,7 @@ only available client side.
 	}
 	 */
 //}
+
 
 /*Used to change the UMG UI widget currently being displayed,
 
