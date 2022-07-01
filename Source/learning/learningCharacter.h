@@ -4,6 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+
+// minimap things
+//#include "Minimap/Public/MapEnums.h"
+//#include "Minimap/Public/MapIconComponent.h"
+//#include "Minimap/Public/MapViewComponent.h"
+//#include "Minimap/Public/MapRevealerComponent.h"
+
+// as always, load the .generated file last
 #include "learningCharacter.generated.h"
 
 class UInputComponent;
@@ -14,12 +22,26 @@ class UMotionControllerComponent;
 class UAnimMontage;
 class USoundBase;
 
+// minimap
+class UMapViewComponent;
+class UMapIconComponent;
+class UMapFogRevealerComponent;
+
 UCLASS(config=Game)
 class AlearningCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+	
+/*=============================================================================
+	BASIC FUNCTIONALITY 
+=============================================================================*/
+
+public:
+	AlearningCharacter();
+
 protected:
+	virtual void BeginPlay();
 	/*
 	In this declaration, the Destroyed method is marked with virtual because 
 	the Character class inherits from the Actor class, which contains its 
@@ -30,6 +52,56 @@ protected:
 
 	//Call Gamemode class to Restart Player Character.
 	void CallRestartPlayer();
+
+/*=============================================================================
+	CAMERA AND GUN
+=============================================================================*/
+
+public:
+	/** Returns Mesh1P subobject **/
+	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
+	/** Returns FirstPersonCameraComponent subobject **/
+	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
+	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
+	float BaseTurnRate;
+
+	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
+	float BaseLookUpRate;
+
+	/** Gun muzzle's offset from the characters location */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Gameplay)
+	FVector GunOffset;
+
+	/** Projectile class to spawn */
+	UPROPERTY(EditDefaultsOnly, Category=Projectile)
+	TSubclassOf<class AlearningProjectile> ProjectileClass;
+
+	/** Sound to play each time we fire */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Gameplay)
+	USoundBase* FireSound;
+
+	/** AnimMontage to play each time we fire */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	UAnimMontage* FireAnimation;
+
+	/** Whether to use motion controller location for aiming. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	uint8 bUsingMotionControllers : 1;
+
+protected:
+	// APawn interface
+	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
+	// End of APawn interface
+
+	/* 
+	 * Configures input for touchscreen devices if there is a valid touch interface for doing so 
+	 *
+	 * @param	InputComponent	The input component pointer to bind controls to
+	 * @returns true if touch controls were enabled.
+	 */
+	bool EnableTouchscreenMovement(UInputComponent* InputComponent);
 	
 	/** Pawn mesh: 1st person view (arms; seen only by self) */
 	UPROPERTY(VisibleDefaultsOnly, Category=Mesh)
@@ -62,50 +134,6 @@ protected:
 	/** Motion controller (left hand) */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UMotionControllerComponent* L_MotionController;
-
-public:
-	AlearningCharacter();
-
-
-/*=============================================================================
-	UMG
-=============================================================================*/
-	//UFUNCTION(BlueprintCallable, Category = "HUD")
-	//class AHUD* GetHUD() const;
-
-protected:
-	virtual void BeginPlay();
-
-public:
-	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
-	float BaseTurnRate;
-
-	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
-	float BaseLookUpRate;
-
-	/** Gun muzzle's offset from the characters location */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Gameplay)
-	FVector GunOffset;
-
-	/** Projectile class to spawn */
-	UPROPERTY(EditDefaultsOnly, Category=Projectile)
-	TSubclassOf<class AlearningProjectile> ProjectileClass;
-
-	/** Sound to play each time we fire */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Gameplay)
-	USoundBase* FireSound;
-
-	/** AnimMontage to play each time we fire */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-	UAnimMontage* FireAnimation;
-
-	/** Whether to use motion controller location for aiming. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-	uint8 bUsingMotionControllers : 1;
-
-protected:
 	
 	/** Fires a projectile. */
 	void OnFire();
@@ -143,25 +171,23 @@ protected:
 	void EndTouch(const ETouchIndex::Type FingerIndex, const FVector Location);
 	void TouchUpdate(const ETouchIndex::Type FingerIndex, const FVector Location);
 	TouchData	TouchItem;
-	
-protected:
-	// APawn interface
-	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
-	// End of APawn interface
 
-	/* 
-	 * Configures input for touchscreen devices if there is a valid touch interface for doing so 
-	 *
-	 * @param	InputComponent	The input component pointer to bind controls to
-	 * @returns true if touch controls were enabled.
-	 */
-	bool EnableTouchscreenMovement(UInputComponent* InputComponent);
 
-public:
-	/** Returns Mesh1P subobject **/
-	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
-	/** Returns FirstPersonCameraComponent subobject **/
-	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
+/*=============================================================================
+	UMG MINIMAP
+=============================================================================/
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class UMapViewComponent* MapView;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class UMapIconComponent* MapIcon;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class UMapRevealerComponent* MapRevealer;
+
+/*=============================================================================
+	UMG
+=============================================================================*/
+	//UFUNCTION(BlueprintCallable, Category = "HUD")
+	//class AHUD* GetHUD() const;
 
 };
-

@@ -40,7 +40,7 @@ void AlearningGameMode::BeginPlay()
 {
 	// when the game starts
 	Super::BeginPlay();
-	
+	UE_LOG(LogBasic, Warning, TEXT("Starting Game"));
 	//Bind our Player died delegate to the Gamemode's PlayerDied function.
 	if (!OnPlayerDied.IsBound())
 	{
@@ -59,9 +59,17 @@ void AlearningGameMode::BeginPlay()
 	// this is a part of the subclass made from GameModeBase that is your games
 	// main game mode bp/class, it will have the name of your project.
 	// you double click it if its a BP
-	// in the default editor setup it will be visible from the start in the sidebar 
-	ChangeMenuWidget(StartingWidgetClass);
+	// in the default editor setup it will be visible from the start in the sidebar
+	if (StartingWidgetClass != nullptr)
+	{
+		ChangeMenuWidget(StartingWidgetClass);
+	}
+	else
+	{
+		UE_LOG(LogBasic,Fatal,TEXT("[FATAL ERROR] StartingWidgetClass not set, please check the \"details\" panel for GameMode in the editor!"));
+	};
 	// game is aware of the user being in main menu
+	//UE_LOG(LogBasic, Warning, TEXT(""));
 	SetCurrentState(EGamePlayState::EInMainMenu);
 
 	// this line "casts" (converts in a sense) the result of GetPlayerPawn() to a game character
@@ -93,16 +101,18 @@ EGamePlayState AlearningGameMode::GetCurrentState() const
 /*
 Sets a new gameplay state from an item in the enum EGamePlayState
 */
+// AlearningGameMode::SetCurrentState(EGamePlayState NewState)
 void AlearningGameMode::SetCurrentState(EGamePlayState NewState)
 {
-	UE_LOG(LogBasic,Warning,TEXT("Setting current Game State to : \n "));
-	UE_LOG(LogBasic,Warning,TEXT("%d"),NewState);
+	UE_LOG(LogBasic,Warning,TEXT("AlearningGameMode::SetCurrentState -> Setting current Game State to : %hs"),GetGameStateString(NewState));
+	//UE_LOG(LogBasic,Warning,TEXT("%hs"),GetGameStateString(NewState));
 	CurrentState = NewState;
 	HandleNewState(CurrentState);
 }
 
 /*
 BluePrint Callable function for setting the game play state via int
+Use the index value of the following enum values
 	Current declaration 
 	enum class EGamePlayState
 	{
@@ -117,21 +127,29 @@ BluePrint Callable function for setting the game play state via int
 */
 void AlearningGameMode::BPSetCurrentState(int NewState)
 {
+	UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::BPSetCurrentState -> %hs"),GetGameStateString(NewState)); 
 	switch (NewState)
 	{
 	case 0:
+		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] SetCurrentState : EPlaying"))
 		SetCurrentState(EGamePlayState::EPlaying);
 	case 1:
+		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] SetCurrentState : EDead"))
 		SetCurrentState(EGamePlayState::EDead);
 	case 2:
+		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] SetCurrentState : EInMainMenu"))
 		SetCurrentState(EGamePlayState::EInMainMenu);
 	case 3:
+		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] SetCurrentState : EPaused "))
 		SetCurrentState(EGamePlayState::EPaused);
 	case 4:
+		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] SetCurrentState : EGameOver"))
 		SetCurrentState(EGamePlayState::EGameOver);
 	case 5:
+		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] SetCurrentState : ECheating"))
 		SetCurrentState(EGamePlayState::ECheating);
 	case 6:
+		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] SetCurrentState : EUnknown"))
 		SetCurrentState(EGamePlayState::EUnknown);
 	
 	default:
@@ -161,12 +179,18 @@ void AlearningGameMode::HandleNewState(EGamePlayState NewState)
 		//DisableFirstPlayerController();
 	case EGamePlayState::EDead:
 		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] GameState Passed to AlearningGameMode::HandleNewState == EGamePlayState::EDead"));
+		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] Game says Player Died! Respawning Player!"));
 		RespawnPlayer(AlearningGameMode::GetFirstPlayerController());
 	break;
 	case EGamePlayState::EGameOver:
 		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] GameState Passed to AlearningGameMode::HandleNewState == EGamePlayState::EGameOver"));
+		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] Game says GAME OVER! Loss conditions met! Restarting world and loading main menu!"));
 		UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
+		// TODO: implement main menu base widget!
+		//ChangeMenuWidget(wMainMenu);
 	break;
+	case EGamePlayState::ECheating:
+		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] Player is confirmed as cheating, applying punishment!"))
 	case EGamePlayState::EUnknown:
 		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] GameState Passed to AlearningGameMode::HandleNewState == EGamePlayState::Unknown"));
 	break;
@@ -286,7 +310,7 @@ only available client side.
 /*
  * Gets the reference to a Blueprint UserWidget
  * Primarily used in the ChangeMenuWidget() function to set game state
- * TODO: create mapstringtoenum(enum)
+ * 
  */
 //void AlearningGameMode::GetWidgetReference()
 //{

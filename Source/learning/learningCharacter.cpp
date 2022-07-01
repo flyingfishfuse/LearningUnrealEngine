@@ -10,7 +10,13 @@
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "MotionControllerComponent.h"
-// wtf? why is the tutorial wanting me to include file higher in hierarchy ?
+
+
+//#include "MapEnums.h"
+//#include "MapIconComponent.h"
+//#include "MapViewComponent.h"
+//#include "MapRevealerComponent.h"
+
 #include "learningGameMode.h"
 #include "XRMotionControllerBase.h" // for FXRMotionControllerBase::RightHandSourceId
 
@@ -24,6 +30,9 @@ AlearningCharacter::AlearningCharacter()
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
 
+	/*=============================================================================
+	CAMERA AND GUN VIEW
+	 =============================================================================*/	
 	// set our turn rates for input
 	BaseTurnRate = 45.f;
 	BaseLookUpRate = 45.f;
@@ -61,6 +70,9 @@ AlearningCharacter::AlearningCharacter()
 	// Note: The ProjectileClass and the skeletal mesh/anim blueprints for Mesh1P, FP_Gun, and VR_Gun 
 	// are set in the derived blueprint asset named MyCharacter to avoid direct content references in C++.
 
+	/*=============================================================================
+		VR CONTROLLER SETUP
+	=============================================================================*/
 	// Create VR Controllers.
 	R_MotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("R_MotionController"));
 	R_MotionController->MotionSource = FXRMotionControllerBase::RightHandSourceId;
@@ -106,12 +118,19 @@ void AlearningCharacter::BeginPlay()
 		Mesh1P->SetHiddenInGame(false, true);
 	}
 }
+
+
+//=============================================================================
+// HUD and player Visuals
+//=============================================================================
 //AHUD* AlearningCharacter::GetHUD() const
 //{
 //	APlayerController* Controller = Cast<APlayerController>(GetController());
 //
 //	return Controller->GetHUD();
 //}
+
+
 /*=============================================================================
 Respawning Mechanics
 =============================================================================*/
@@ -185,6 +204,9 @@ void AlearningCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AlearningCharacter::LookUpAtRate);
 }
 
+//=============================================================================
+// Gun Action, OnFire() implementation
+//=============================================================================
 void AlearningCharacter::OnFire()
 {
 	// try and fire a projectile
@@ -238,6 +260,9 @@ void AlearningCharacter::OnResetVR()
 	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
 }
 
+//=============================================================================
+// Touch actions
+//=============================================================================
 void AlearningCharacter::BeginTouch(const ETouchIndex::Type FingerIndex, const FVector Location)
 {
 	if (TouchItem.bIsPressed == true)
@@ -301,6 +326,9 @@ void AlearningCharacter::EndTouch(const ETouchIndex::Type FingerIndex, const FVe
 //	}
 //}
 
+//=============================================================================
+// MOVEMENT
+//=============================================================================
 void AlearningCharacter::MoveForward(float Value)
 {
 	if (Value != 0.0f)
@@ -345,3 +373,40 @@ bool AlearningCharacter::EnableTouchscreenMovement(class UInputComponent* Player
 	
 	return false;
 }
+/*=============================================================================
+	 MINIMAP IMPLEMENTATION
+=============================================================================/
+	// The following code is character setup for Journeyman's Minima
+
+	const FRotator SidescrollRotation(0, 90, 90);
+
+	// MapIconComponent makes the character appear on the minimap
+	static ConstructorHelpers::FObjectFinder<UTexture2D> PlayerIcon(TEXT("/MinimapPlugin/Textures/Icons/T_Icon_Placeholder"));
+	MapIcon = CreateDefaultSubobject<UMapIconComponent>(TEXT("MapIcon"));
+	MapIcon->SetupAttachment(GetRootComponent());
+	// Set the player icon as texture
+	MapIcon->SetIconTexture(PlayerIcon.Object);
+	// The icon will rotate to represent the character's rotation
+	MapIcon->SetIconRotates(true);
+
+	// MapViewComponent allows the minimap to follow the character
+	MapView = CreateDefaultSubobject<UMapViewComponent>(TEXT("MapView"));
+	MapView->SetupAttachment(GetRootComponent());
+	// How far the player can see on the minimap. Change during gameplay to apply zooming. Aspect ratio must match the minimap widget's aspect ratio.
+	MapView->SetViewExtent(512.f, 512.f);
+	// Whether the minimap should rotate with the player. Set to false for fixed rotation minimap.
+	MapView->RotationMode = EMapViewRotationMode::UseFixedRotation;
+	// The axis that represents the depth-direction for side scrolling
+	MapView->FixedRotation = SidescrollRotation;
+	MapView->SetRelativeRotation(SidescrollRotation.Quaternion());
+
+	// MapRevealerComponent makes the character reveal fog
+	MapRevealer = CreateDefaultSubobject<UMapRevealerComponent>(TEXT("MapRevealer"));
+	MapRevealer->SetupAttachment(GetRootComponent());
+	// Sets the radius that the player reveals 100%, and the distance over which it linearly drops off
+	MapRevealer->SetRevealExtent(200.f, 200.f);
+	MapRevealer->SetRevealDropOffDistance(100.f);
+	// Reveal temporarily to make areas hidden again after leaving. Reveal permanently to make areas explored forever.
+	MapRevealer->SetRevealMode(EMapFogRevealMode::Temporary);
+}
+*/

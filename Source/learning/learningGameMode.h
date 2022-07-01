@@ -5,13 +5,13 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "Blueprint/UserWidget.h"
-#include "MainPlayerController.h"
-#include "Kismet/GameplayStatics.h"
+//#include "MainPlayerController.h"
+//#include "Kismet/GameplayStatics.h"
 
 #include <string>
 //#include "Runtime/Core/Public/GenericPlatform/GenericPlatformMisc.h"
-#include <EngineGlobals.h>
-#include <Runtime/Engine/Classes/Engine/Engine.h>
+//#include <EngineGlobals.h>
+//#include <Runtime/Engine/Classes/Engine/Engine.h>
 
 // This always goes last
 #include "learningGameMode.generated.h"
@@ -75,6 +75,24 @@ enum class EGamePlayState
     ECheating,
 	EUnknown
 };
+// strings to map to enum for logging and error handling
+static const char * EGamePlayStateStrings[] = { "EPlaying",
+												"EDead",
+												"EInMainMenu",
+												"EPaused",
+												"EGameOver",
+												"ECheating",
+												"EUnknown"
+};
+
+/*
+ * Maps EGamePlayState to strings describing the enum value names
+ * This is used for debugging, output formatting, and easier logging 
+ */
+inline const char * GetGameStateString( int enumVal )
+{
+	return EGamePlayStateStrings[enumVal];
+}
 
 /*
  * Magic numbers! YAY!
@@ -193,6 +211,7 @@ public:
     Internally used function for setting a new playing state INTERNALLY 
     Enums are not valid parameters for blueprints
     */
+	//SetCurrentState(EGamePlayState NewState)
 	void SetCurrentState(EGamePlayState NewState);
 
     /*Opens a level, loading assets af if newly visited*/
