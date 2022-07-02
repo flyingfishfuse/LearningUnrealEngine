@@ -1,0 +1,140 @@
+LogTemp: Repeating last play command: Selected Viewport
+LogPlayLevel: PlayLevel: No blueprints needed recompiling
+PIE: New page: PIE session: FirstPersonExampleMap (Jul 1, 2022, 7:47:56 AM)
+LogPlayLevel: Creating play world package: /Game/FirstPersonCPP/Maps/UEDPIE_0_FirstPersonExampleMap
+LogPlayLevel: PIE: StaticDuplicateObject took: (0.204015s)
+LogAIModule: Creating AISystem for world FirstPersonExampleMap
+LogPlayLevel: PIE: World Init took: (0.001366s)
+LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/FirstPersonCPP/Maps/FirstPersonExampleMap.FirstPersonExampleMap to /Game/FirstPersonCPP/Maps/UEDPIE_0_FirstPersonExampleMap.FirstPersonExampleMap (0.205617s)
+LogUObjectHash: Compacting FUObjectHashTables data took   2.88ms
+LogAudio: Display: Creating Audio Device:                 Id: 4, Scope: Unique, Realtime: True
+LogAudioMixer: Display: Audio Mixer Platform Settings:
+LogAudioMixer: Display:     Sample Rate:                          48000
+LogAudioMixer: Display:     Callback Buffer Frame Size Requested: 1024
+LogAudioMixer: Display:     Callback Buffer Frame Size To Use:    1024
+LogAudioMixer: Display:     Number of buffers to queue:           2
+LogAudioMixer: Display:     Max Channels (voices):                32
+LogAudioMixer: Display:     Number of Async Source Workers:       0
+LogAudio: Display: AudioDevice MaxSources: 32
+LogAudio: Display: Audio Spatialization Plugin: None (built-in).
+LogAudio: Display: Audio Reverb Plugin: None (built-in).
+LogAudio: Display: Audio Occlusion Plugin: None (built-in).
+LogAudioMixer: Display: Initializing audio mixer.
+LogAudioMixer: Display: 0: FrontLeft
+LogAudioMixer: Display: 1: FrontRight
+LogAudioMixer: Display: Using Audio Device LG TV RVU (2- NVIDIA High Definition Audio)
+LogAudioMixer: Display: Initializing Sound Submixes...
+LogAudioMixer: Display: Creating Master Submix 'MasterSubmixDefault'
+LogAudioMixer: Display: Creating Master Submix 'MasterReverbSubmixDefault'
+LogAudioMixer: Display: Creating Master Submix 'MasterEQSubmixDefault'
+LogAudioMixer: FMixerPlatformXAudio2::StartAudioStream() called
+LogAudioMixer: Display: Output buffers initialized: Frames=1024, Channels=2, Samples=2048
+LogAudioMixer: Display: Starting AudioMixerPlatformInterface::RunInternal()
+LogAudioMixer: Display: FMixerPlatformXAudio2::SubmitBuffer() called for the first time
+LogInit: FAudioDevice initialized.
+LogAudio: Display: Audio Device (ID: 4) registered with world 'FirstPersonExampleMap'.
+LogLoad: Game class is 'MenuGameMode_C'
+LogWorld: Bringing World /Game/FirstPersonCPP/Maps/UEDPIE_0_FirstPersonExampleMap.FirstPersonExampleMap up for play (max tick rate 0) at 2022.07.01-11.47.56
+LogWorld: Bringing up level for play took: 0.018626
+LogOnline: OSS: Creating online subsystem instance for: :Context_8
+LogBasic: Warning: [DEBUG] AlearningGameMode::GetFirstPlayerController
+LogBasic: Warning: [DEBUG] AlearningGameMode::ChangeMenuWidget
+LogBasic: Warning: [DEBUG] ChangeMenuWidget -> CurrentWidget not Nullptr. Creating New Widget
+LogBasic: Warning: [DEBUG] ChangeMenuWidget -> Adding Newly Created Widget to Viewport
+LogBasic: Warning: Setting current Game State to : 
+ 
+LogBasic: Warning: 2
+LogBasic: Warning: [DEBUG] Handling New Gameplay State
+LogBasic: Warning: [DEBUG] GameState Passed to AlearningGameMode::HandleNewState == EGamePlayState::EInMainMenu
+LogBasic: Warning: [DEBUG] GameState Passed to AlearningGameMode::HandleNewState == EGamePlayState::EDead
+LogBasic: Warning: [DEBUG] AlearningGameMode::GetFirstPlayerController
+LogBasic: Warning: [DEBUG] AlearningGameMode::RespawnPlayer
+PIE: Server logged in
+PIE: Play in editor total start time 0.353 seconds.
+LogBasic: Warning: [DEBUG] AlearningGameMode::ChangeMenuWidget
+LogBasic: Warning: [DEBUG] ChangeMenuWidget -> CurrentWidget not Nullptr. Removing Current Widget from Viewport
+LogBasic: Warning: [DEBUG] ChangeMenuWidget -> CurrentWidget not Nullptr. Creating New Widget
+LogBasic: Warning: [DEBUG] ChangeMenuWidget -> Adding Newly Created Widget to Viewport
+LogBasic: Warning: Setting current Game State to : 
+ 
+LogBasic: Warning: 0
+LogBasic: Warning: [DEBUG] Handling New Gameplay State
+LogBasic: Warning: [DEBUG] GameState Passed to AlearningGameMode::HandleNewState == EGamePlayState::Playing
+LogBasic: Warning: Setting current Game State to : 
+ 
+LogBasic: Warning: 1
+LogBasic: Warning: [DEBUG] Handling New Gameplay State
+LogBasic: Warning: [DEBUG] GameState Passed to AlearningGameMode::HandleNewState == EGamePlayState::EDead
+LogBasic: Warning: [DEBUG] AlearningGameMode::GetFirstPlayerController
+LogBasic: Warning: [DEBUG] AlearningGameMode::RespawnPlayer
+LogBasic: Warning: Setting current Game State to : 
+ 
+LogBasic: Warning: 2
+LogBasic: Warning: [DEBUG] Handling New Gameplay State
+LogBasic: Warning: [DEBUG] GameState Passed to AlearningGameMode::HandleNewState == EGamePlayState::EInMainMenu
+LogBasic: Warning: [DEBUG] GameState Passed to AlearningGameMode::HandleNewState == EGamePlayState::EDead
+LogBasic: Warning: [DEBUG] AlearningGameMode::GetFirstPlayerController
+LogBasic: Warning: [DEBUG] AlearningGameMode::RespawnPlayer
+LogBasic: Warning: Setting current Game State to : 
+ 
+LogBasic: Warning: 3
+LogBasic: Warning: [DEBUG] Handling New Gameplay State
+LogBasic: Warning: Setting current Game State to : 
+ 
+LogBasic: Warning: 4
+LogBasic: Warning: [DEBUG] Handling New Gameplay State
+LogBasic: Warning: [DEBUG] GameState Passed to AlearningGameMode::HandleNewState == EGamePlayState::EGameOver
+LogBasic: Warning: Setting current Game State to : 
+ 
+LogBasic: Warning: 5
+LogBasic: Warning: [DEBUG] Handling New Gameplay State
+LogBasic: Warning: Setting current Game State to : 
+ 
+LogBasic: Warning: 6
+LogBasic: Warning: [DEBUG] Handling New Gameplay State
+LogBasic: Warning: [DEBUG] GameState Passed to AlearningGameMode::HandleNewState == EGamePlayState::Unknown
+LogBasic: Warning: [DEBUG] AlearningGameMode::ChangeMenuWidget
+LogBasic: Warning: [DEBUG] ChangeMenuWidget -> CurrentWidget not Nullptr. Removing Current Widget from Viewport
+LogNet: Browse: /Game/FirstPersonCPP/Maps/FirstPersonExampleMap
+LogLoad: LoadMap: /Game/FirstPersonCPP/Maps/FirstPersonExampleMap
+LogWorld: BeginTearingDown for /Game/FirstPersonCPP/Maps/UEDPIE_0_FirstPersonExampleMap
+LogBasic: Warning: [+] AlearningGameMode::PlayerDied 
+LogBasic: Warning: [DEBUG] AlearningGameMode::RespawnPlayer
+LogWorld: UWorld::CleanupWorld for FirstPersonExampleMap, bSessionEnded=true, bCleanupResources=true
+LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+LogAudio: Display: Audio Device unregistered from world 'None'.
+LogUObjectHash: Compacting FUObjectHashTables data took   2.54ms
+LogPlayLevel: Creating play world package: /Game/FirstPersonCPP/Maps/UEDPIE_0_FirstPersonExampleMap
+LogPlayLevel: PIE: StaticDuplicateObject took: (0.203646s)
+LogAIModule: Creating AISystem for world FirstPersonExampleMap
+LogPlayLevel: PIE: World Init took: (0.001762s)
+LogPlayLevel: PIE: Created PIE world by copying editor world from /Game/FirstPersonCPP/Maps/FirstPersonExampleMap.FirstPersonExampleMap to /Game/FirstPersonCPP/Maps/UEDPIE_0_FirstPersonExampleMap.FirstPersonExampleMap (0.205700s)
+LogAudio: Display: Audio Device (ID: 4) registered with world 'FirstPersonExampleMap'.
+LogLoad: Game class is 'MenuGameMode_C'
+LogWorld: Bringing World /Game/FirstPersonCPP/Maps/UEDPIE_0_FirstPersonExampleMap.FirstPersonExampleMap up for play (max tick rate 0) at 2022.07.01-11.48.04
+LogWorld: Bringing up level for play took: 0.138636
+LogBasic: Warning: [DEBUG] AlearningGameMode::GetFirstPlayerController
+LogBasic: Warning: [DEBUG] AlearningGameMode::ChangeMenuWidget
+LogBasic: Warning: [DEBUG] ChangeMenuWidget -> CurrentWidget not Nullptr. Creating New Widget
+LogBasic: Warning: [DEBUG] ChangeMenuWidget -> Adding Newly Created Widget to Viewport
+LogBasic: Warning: Setting current Game State to : 
+ 
+LogBasic: Warning: 2
+LogBasic: Warning: [DEBUG] Handling New Gameplay State
+LogBasic: Warning: [DEBUG] GameState Passed to AlearningGameMode::HandleNewState == EGamePlayState::EInMainMenu
+LogBasic: Warning: [DEBUG] GameState Passed to AlearningGameMode::HandleNewState == EGamePlayState::EDead
+LogBasic: Warning: [DEBUG] AlearningGameMode::GetFirstPlayerController
+LogBasic: Warning: [DEBUG] AlearningGameMode::RespawnPlayer
+LogLoad: Took 0.400355 seconds to LoadMap(/Game/FirstPersonCPP/Maps/UEDPIE_0_FirstPersonExampleMap)
+LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+LogWorld: BeginTearingDown for /Game/FirstPersonCPP/Maps/UEDPIE_0_FirstPersonExampleMap
+LogWorld: UWorld::CleanupWorld for FirstPersonExampleMap, bSessionEnded=true, bCleanupResources=true
+LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+LogPlayLevel: Display: Shutting down PIE online subsystems
+LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+LogAudio: Display: Audio Device unregistered from world 'None'.
+LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+LogAudioMixer: FMixerPlatformXAudio2::StopAudioStream() called
+LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+LogUObjectHash: Compacting FUObjectHashTables data took   2.41ms
+LogPlayLevel: Display: Destroying online subsystem :Context_8
