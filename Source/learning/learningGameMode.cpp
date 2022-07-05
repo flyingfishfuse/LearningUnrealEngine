@@ -9,13 +9,11 @@
 #include "learningCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "Blueprint/UserWidget.h"
-#include "Blueprint/WidgetTree.h"
+//#include "Blueprint/WidgetTree.h"
 #include "UObject/ConstructorHelpers.h"
 
 // second part of the complement in the .h file
 DEFINE_LOG_CATEGORY(LogBasic);
-
-
 AlearningGameMode::AlearningGameMode()
 	: Super()
 {
@@ -24,7 +22,7 @@ AlearningGameMode::AlearningGameMode()
 	DefaultPawnClass = PlayerPawnClassFinder.Class;
 	//UE_LOG(LogBasic, Warning, TEXT("%ls"), DefaultPawnClass->GetFName());
 	// use our custom HUD class
-	HUDClass = AlearningHUD::StaticClass();
+	//HUDClass = AlearningHUD::StaticClass();
 }
 
 /*
@@ -41,10 +39,11 @@ void AlearningGameMode::BeginPlay()
 {
 	// when the game starts
 	Super::BeginPlay();
-	UE_LOG(LogBasic, Warning, TEXT("Starting Game"));
-	//Bind our Player died delegate to the Gamemode's PlayerDied function.
+	UE_LOG(LogBasic, Warning, TEXT("[DEBUG] AlearningGameMode::BeginPlay -> Starting Game"));
+	
 	if (!OnPlayerDied.IsBound())
 	{
+		UE_LOG(LogBasic, Warning, TEXT("[DEBUG] AlearningGameMode::BeginPlay -> Binding our Player died delegate to the Gamemode's PlayerDied function."));
 		OnPlayerDied.AddDynamic(this, &AlearningGameMode::PlayerDied);
 	}
 
@@ -55,7 +54,6 @@ void AlearningGameMode::BeginPlay()
 	// its using our custom function that allows us to avoid too many lines of code
 	APlayerController* PlayerController = AlearningGameMode::GetFirstPlayerController();
 	// this line "casts" (converts in a sense) the result of GetPlayerPawn() to a game character
-	// it needs error checking and handling from an "if" control loop in case of failure
 	//FirstPlayerCharacter = Cast<AlearningCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
 
 	// open main menu
@@ -66,15 +64,17 @@ void AlearningGameMode::BeginPlay()
 	// in the default editor setup it will be visible from the start in the sidebar
 	if (StartingWidgetClass != nullptr)
 	{
+		// game is aware of the user being in main menu
+		UE_LOG(LogBasic, Warning, TEXT("[DEBUG] AlearningGameMode::BeginPlay -> Calling AlearningGameMode::SetCurrentState(EGamePlayState::EInMainMenu)"));
+		SetCurrentState(EGamePlayState::EInMainMenu);
+		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::BeginPlay -> Calling ChangeMenuWidget "));
 		ChangeMenuWidget(StartingWidgetClass);
 	}
 	else
 	{
 		UE_LOG(LogBasic,Fatal,TEXT("[FATAL ERROR] StartingWidgetClass not set, please check the \"details\" panel for GameMode in the editor!"));
 	};
-	// game is aware of the user being in main menu
-	//UE_LOG(LogBasic, Warning, TEXT(""));
-	SetCurrentState(EGamePlayState::EInMainMenu);
+
 
 	//==========================================================================
 	// STOP!!
@@ -116,17 +116,17 @@ EGamePlayState AlearningGameMode::GetCurrentState() const
 /*
 Sets a new gameplay state from an item in the enum EGamePlayState
 */
-// AlearningGameMode::SetCurrentState(EGamePlayState NewState)
 void AlearningGameMode::SetCurrentState(EGamePlayState NewState)
 {
-	UE_LOG(LogBasic,Warning,TEXT("AlearningGameMode::SetCurrentState -> Setting current Game State to : %hs"),GetGameStateString(NewState));
-	//UE_LOG(LogBasic,Warning,TEXT("%hs"),GetGameStateString(NewState));
+	UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::SetCurrentState : NEW STATE -> %hs"),GetGameStateString(NewState));
 	CurrentState = NewState;
 	HandleNewState(CurrentState);
-}
+};
 
 /*
 BluePrint Callable function for setting the game play state via int
+
+This is a wrapper for AlearningGameMode::SetCurrentState()
 Use the index value of the following enum values
 	Current declaration 
 	enum class EGamePlayState
@@ -139,34 +139,41 @@ Use the index value of the following enum values
 		ECheating,
 		EUnknown
 	};
-*/
+	*/
 void AlearningGameMode::BPSetCurrentState(int NewState)
 {
 	// not functional yet >>> GetGameStateString(int NewState)
-	//UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::BPSetCurrentState -> %hs"),GetGameStateString(NewState)); 
+	UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::BPSetCurrentState -> NEW STATE PASSED VALUE: %i"),NewState); 
 	switch (NewState)
 	{
 	case 0:
-		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] SetCurrentState : EPlaying"))
+		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::BPSetCurrentState -> EPlaying"))
 		SetCurrentState(EGamePlayState::EPlaying);
+		break;
 	case 1:
-		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] SetCurrentState : EDead"))
+		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::BPSetCurrentState -> EDead"))
 		SetCurrentState(EGamePlayState::EDead);
+		break;
 	case 2:
-		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] SetCurrentState : EInMainMenu"))
+		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::BPSetCurrentState -> EInMainMenu"))
 		SetCurrentState(EGamePlayState::EInMainMenu);
+		break;
 	case 3:
-		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] SetCurrentState : EPaused "))
+		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::BPSetCurrentState -> EPaused "))
 		SetCurrentState(EGamePlayState::EPaused);
+		break;
 	case 4:
-		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] SetCurrentState : EGameOver"))
+		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::BPSetCurrentState -> EGameOver"))
 		SetCurrentState(EGamePlayState::EGameOver);
+		break;
 	case 5:
-		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] SetCurrentState : ECheating"))
+		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::BPSetCurrentState -> ECheating"))
 		SetCurrentState(EGamePlayState::ECheating);
+		break;
 	case 6:
-		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] SetCurrentState : EUnknown"))
+		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::BPSetCurrentState -> EUnknown"))
 		SetCurrentState(EGamePlayState::EUnknown);
+		break;
 	
 	default:
 	break;
@@ -179,41 +186,40 @@ Main control flow for handling gameplay states
 */
 void AlearningGameMode::HandleNewState(EGamePlayState NewState)
 {
-	UE_LOG(LogBasic,Warning,TEXT("[DEBUG] Handling New Gameplay State"))
+	UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::HandleNewState"))
 	switch (NewState)
 	{
 	case EGamePlayState::EPlaying:
-	{
 		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] GameState Passed to AlearningGameMode::HandleNewState == EGamePlayState::Playing"))
-			UE_LOG(LogBasic,Warning,TEXT("[DEBUG] Player Is Playing Game!"))
+		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] Player Is Playing Game!"))
 		// Enable Input in the main control flow
 		//ReEnableFirstPlayerController();
 		// do nothing
-	}
-	break;
+		break;
 	case EGamePlayState::EInMainMenu:
 		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] GameState Passed to AlearningGameMode::HandleNewState == EGamePlayState::EInMainMenu"));
 		// if the character is in the main menu, we want to disable player input
 		// so they cannot fire or move
 		//DisableFirstPlayerController();
+		break;
 	case EGamePlayState::EDead:
 		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] GameState Passed to AlearningGameMode::HandleNewState == EGamePlayState::EDead"));
 		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] Game says Player Died! Respawning Player!"));
 		RespawnPlayer(AlearningGameMode::GetFirstPlayerController());
-	break;
+		break;
 	case EGamePlayState::EGameOver:
 		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] GameState Passed to AlearningGameMode::HandleNewState == EGamePlayState::EGameOver"));
 		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] Game says GAME OVER! Loss conditions met! Restarting world and loading main menu!"));
 		UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 		// TODO: implement main menu base widget!
 		//ChangeMenuWidget(wMainMenu);
-	break;
+		break;
 	case EGamePlayState::ECheating:
 		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] Player is confirmed as cheating, applying punishment!"))
+		break;
 	case EGamePlayState::EUnknown:
 		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] GameState Passed to AlearningGameMode::HandleNewState == EGamePlayState::Unknown"));
-	break;
-	
+		break;
 	// Unknown/default state
 	default:
 		break;
@@ -225,22 +231,22 @@ void AlearningGameMode::HandleNewState(EGamePlayState NewState)
 /*
 Jumps the player to a different level starting point
 */
-void AlearningGameMode::JumptoLevel(const FString& LevelName)
-{
-	UE_LOG(LogBasic,Warning,TEXT("[DEBUG]AlearningGameMode::JumptoLevel %ls"),*LevelName);
-	UGameplayStatics::OpenLevel(this, FName(*LevelName), false);
-}
+//void AlearningGameMode::JumptoLevel(const FString& LevelName)
+//{
+//	UE_LOG(LogBasic,Warning,TEXT("[DEBUG]AlearningGameMode::JumptoLevel %ls"),*LevelName);
+//	UGameplayStatics::OpenLevel(this, FName(*LevelName), false);
+//}
 
 
 /*
 Restarts the current level
 */
-void AlearningGameMode::RestartLevel()
-{
-	print("restarting level")
-	UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::RestartLevel"));
-	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
-}
+//void AlearningGameMode::RestartLevel()
+//{
+//	print("restarting level")
+//	UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::RestartLevel"));
+//	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
+//}
 
 
 /*
@@ -251,7 +257,7 @@ void AlearningGameMode::RespawnPlayer(AController* NewPlayer)
 {
 	
 	//Super::RestartPlayer(NewPlayer);
-	print("respawning...")
+	print("[DEBUG] AlearningGameMode::RespawnPlayer respawning...")
 	UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::RespawnPlayer"));
 	AGameModeBase::RestartPlayer(NewPlayer);
 
@@ -279,7 +285,7 @@ requires two lines of code
 APlayerController* AlearningGameMode::GetFirstPlayerController()
 {
 	UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::GetFirstPlayerController"));
-	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+	//APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 	return PlayerController;
 }
@@ -290,6 +296,7 @@ APlayerController* AlearningGameMode::GetFirstPlayerController()
  * Created initially for preventing firing the weapon in the menu
  * Can be used for cutscenes
  */
+/*
 void AlearningGameMode::DisableFirstPlayerController()
 {
 	UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::DisableFirstPlayerController "));
@@ -307,6 +314,7 @@ void AlearningGameMode::DisableFirstPlayerController()
  * Initially created for Re Enabling Input after leaving menu
  * Can be used for cutscenes
  */
+/*
 void AlearningGameMode::ReEnableFirstPlayerController()
 {
 	UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::ReEnableFirstPlayerController"));
@@ -314,7 +322,7 @@ void AlearningGameMode::ReEnableFirstPlayerController()
 	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 	PlayerPawn->EnableInput(PlayerController);
 }
-
+*/
 
 /*
 * I always suggest people to use the HUD class for this.That’s exactly what it 
@@ -389,8 +397,13 @@ void AlearningGameMode::ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass
 			MyMainMenu->AddToViewport();
 		}
 	*/
-	// print demugging message indicating current flow location
-	UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::ChangeMenuWidget"));
+	// print debugging message indicating current flow location
+	UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::ChangeMenuWidget New WidgetClass:"));
+
+	// for printing the widget name?
+	new FString;
+	const FString WidgetName = NewWidgetClass->GetFName().ToString();
+	UE_LOG(LogBasic,Warning,TEXT("%s"),*WidgetName);
 	
 	// widget on screen isnt a nullptr, i.e. something is there
 	if (CurrentWidget != nullptr)

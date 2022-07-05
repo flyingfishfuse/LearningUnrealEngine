@@ -45,9 +45,7 @@ void AlearningHUD::ShowMainMenu()
 	MainMenu->AddToViewport();
 }
 
-/*
-Hides the main menu for the player
-*/
+//Hides the main menu for the player
 void AlearningHUD::HideMainMenu()
 {
 
@@ -62,6 +60,7 @@ void AlearningHUD::HideMainMenu()
 		MainMenu = nullptr;
 	}
 }
+
 
 void AlearningHUD::DrawHealthBar()
 {

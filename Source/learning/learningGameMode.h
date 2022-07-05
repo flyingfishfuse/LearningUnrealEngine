@@ -94,9 +94,9 @@ static const char * EGamePlayStateStrings[] = { "EPlaying",
  */
 inline const char * GetGameStateString( EGamePlayState EnumMember)
 {
-	const int IndexOfEnum =  int(EnumMember);
-	return EGamePlayStateStrings[IndexOfEnum];
-}
+	//const int IndexOfEnum =  int(EnumMember);
+	return EGamePlayStateStrings[int(EnumMember)];//IndexOfEnum];
+};
 /*
  * Gets eGamePlayState by index
  */
@@ -136,9 +136,11 @@ public:
 	AlearningGameMode();
 
     // set pointer to PlayerCharacter
-    //AlearningCharacter* PlayerCharacter;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Internals")
+    class AlearningCharacter* PlayerCharacter;
     // set pointer to player controller
-    //class APlayerController* ThePlayerController;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Internals")
+    APlayerController* ThePlayerController;
 
 
     //virtual void Tick(float DeltaTime);// override;
@@ -161,11 +163,12 @@ public:
     // of the editor, is that it adds an entry named wMainMenu
     // with an associated drop-down menu that you can assign 
     // the blueprint to!
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
-    TSubclassOf<class UUserWidget> wMainMenu;
+    //UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UMG Functions")
+    //TSubclassOf<class UUserWidget> wMainMenu;
 
     // Variable to hold the widget After Creating it.
-    UUserWidget* MainMenuWidget;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UMG Functions")
+    //UUserWidget* MainMenuWidget;
 
 protected:
 
@@ -224,23 +227,25 @@ public:
 	//SetCurrentState(EGamePlayState NewState)
 	void SetCurrentState(EGamePlayState NewState);
 
-    /*Opens a level, loading assets af if newly visited*/
-    UFUNCTION(BlueprintCallable, Category = "Game Mechanics")
-    void JumptoLevel(const FString& LevelName);
+    /*Opens a level, loading assets as if newly visited*/
+    //UFUNCTION(BlueprintCallable, Category = "Game Mechanics")
+    //void JumptoLevel(const FString& LevelName);
 
-    UFUNCTION(BlueprintCallable, Category = "Game Mechanics")
-    void RestartLevel();
+	/*Restarts the level, Loads assets af if new*/
+    //UFUNCTION(BlueprintCallable, Category = "Game Mechanics")
+    //void RestartLevel();
 
+	// Delegate function signature binding
     const FOnPlayerDiedSignature& GetOnPlayerDied()	const { return OnPlayerDied; }
 
     //Tries to Spawn the player's pawn.
     virtual void RespawnPlayer(AController* NewPlayer);
 
-	UFUNCTION(BlueprintCallable,Category="Game Mechanics")
-	void DisableFirstPlayerController();
+	//UFUNCTION(BlueprintCallable,Category="Game Mechanics")
+	//void DisableFirstPlayerController();
 
-	UFUNCTION(BlueprintCallable,Category="Game Mechanics")
-	void ReEnableFirstPlayerController();
+	//UFUNCTION(BlueprintCallable,Category="Game Mechanics")
+	//void ReEnableFirstPlayerController();
 	
 protected:
     //Called when Player character has died.
@@ -256,7 +261,7 @@ protected:
     // less verbose method for getting player controller
     APlayerController* GetFirstPlayerController();
 
-private:
+//private:
 	/**Keeps track of the current playing state */
 	EGamePlayState CurrentState;
 

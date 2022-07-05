@@ -50,13 +50,13 @@ class AlearningHUD : public AHUD
 {
 	GENERATED_BODY()
 
-		// MAIN MENU AVAILABLE VIA BLUEPRINT
-		// Make BlueprintCallable for testing
-		UFUNCTION(BlueprintCallable)
-		void ShowMainMenu();
+	// MAIN MENU AVAILABLE VIA BLUEPRINT
+	// Make BlueprintCallable for testing
+	UFUNCTION(BlueprintCallable)
+	void ShowMainMenu();
 
 	UFUNCTION(BlueprintCallable)
-		void HideMainMenu();
+	void HideMainMenu();
 
 	UFUNCTION(BlueprintCallable)
 		void DrawHealthBar();
