@@ -52,17 +52,17 @@ class AlearningHUD : public AHUD
 
 	// MAIN MENU AVAILABLE VIA BLUEPRINT
 	// Make BlueprintCallable for testing
-	UFUNCTION(BlueprintCallable)
-	void ShowMainMenu();
+//	UFUNCTION(BlueprintCallable)
+//	void ShowMainMenu();
 
-	UFUNCTION(BlueprintCallable)
-	void HideMainMenu();
+//	UFUNCTION(BlueprintCallable)
+//	void HideMainMenu();
 
-	UFUNCTION(BlueprintCallable)
-		void DrawHealthBar();
+//	UFUNCTION(BlueprintCallable)
+//		void DrawHealthBar();
 
-	UFUNCTION(BlueprintCallable)
-		void DrawStaminaBar();
+//	UFUNCTION(BlueprintCallable)
+//		void DrawStaminaBar();
 
 	UFUNCTION(BlueprintCallable)
 		void DrawMiniMap();

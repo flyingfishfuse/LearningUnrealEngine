@@ -31,17 +31,11 @@
 =======================LOGS=================================
     
     Warning      LogBasic                  [DEBUG] AlearningGameMode::BeginPlay -> Starting Game
-    Warning      LogBasic                  [DEBUG] AlearningGameMode::BeginPlay -> Binding our Player died delegate to the Gamemode's PlayerDied function.
-    Warning      LogBasic                  [DEBUG] AlearningGameMode::BeginPlay -> Calling AlearningGameMode::SetCurrentState(EGamePlayState::EInMainMenu)
-    Warning      LogBasic                  AlearningGameMode::SetCurrentState
-    Warning      LogBasic                  [DEBUG] AlearningGameMode::HandleNewState -> Handling New Gameplay State
-    Warning      LogBasic                  [DEBUG] GameState Passed to AlearningGameMode::HandleNewState == EGamePlayState::EInMainMenu
-    Warning      LogBasic                  [DEBUG] GameState Passed to AlearningGameMode::HandleNewState == EGamePlayState::EDead
-    Warning      LogBasic                  [DEBUG] Game says Player Died! Respawning Player!
-    Warning      LogBasic                  [DEBUG] AlearningGameMode::GetFirstPlayerController
-    Warning      LogBasic                  [DEBUG] AlearningGameMode::RespawnPlayer
-    Warning      LogOutputDevice           Script Stack (0 frames):
-    Log          LogWindows                Windows GetLastError: The operation completed successfully. (0)
-    Error        LogWindows                === Critical error: ===
-    Error        LogWindows                Fatal error: [File:K:\GameDesignFolder\games\learning\Source\learning\learningGameMode.cpp] [Line: 70]
-    Error        LogWindows                [DEBUG] AlearningGameMode::BeginPlay -> Calling ChangeMenuWidget 
+
+
+This is a DANGEROUS line of code I saw on reddit I am keeping here to illustrate a point, and to remember for later
+
+    _Noreturn void InvokeUndefinedBehavior() {
+    *(volatile int *){0} = (volatile int){1}/(volatile int){0};
+    __builtin_unreachable();
+    }

@@ -35,6 +35,7 @@ void AlearningHUD::DrawHUD()
 	//Canvas->DrawItem( TileItem );
 }
 
+/*===================== BEGIN COMMENT BLOCK =====================
 
 void AlearningHUD::ShowMainMenu()
 {
@@ -44,6 +45,7 @@ void AlearningHUD::ShowMainMenu()
 
 	MainMenu->AddToViewport();
 }
+
 
 //Hides the main menu for the player
 void AlearningHUD::HideMainMenu()
@@ -70,6 +72,9 @@ void AlearningHUD::DrawStaminaBar()
 {
 
 }
+
+ ===================== END COMMENT BLOCK =====================*/
+
 void AlearningHUD::DrawMiniMap()
 {
 
