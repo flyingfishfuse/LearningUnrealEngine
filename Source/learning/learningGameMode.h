@@ -157,6 +157,9 @@ public:
     UFUNCTION(BlueprintCallable, Category = "UMG Functions")
     void ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass);
 
+    UFUNCTION(BlueprintCallable, Category = "UMG Functions")
+        FString GetWidgetName(TSubclassOf<UUserWidget> WidgetObject);
+
     /*https://nerivec.github.io/old-ue4-wiki/pages/umg-referencing-umg-widgets-in-code.html*/
     // Reference UMG Asset in the Editor
     // what this means (nobody says it this way) is that in the details panel

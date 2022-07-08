@@ -19,7 +19,7 @@ public:
 
 	/*
 	*	CURRENT STATS
-	*/
+	/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Current Player Stats")
 	int32 PlayerCurrentHealth;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Current Player Stats")
@@ -33,11 +33,11 @@ public:
 
 	/*
 	 *	STAT MODIFIERS
-	*/
+	/
 
 	/*
 	 *	BASE STATS
-	 */
+	 /
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base Player Stats")
 	int32 PlayerBaseHealth;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base Player Stats")
@@ -52,6 +52,6 @@ public:
 	int32 PlayerBaseStealth;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base Player Stats")
 	int32 PlayerBaseConstitution;
-
+*/
 
 };

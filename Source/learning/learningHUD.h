@@ -64,17 +64,17 @@ class AlearningHUD : public AHUD
 //	UFUNCTION(BlueprintCallable)
 //		void DrawStaminaBar();
 
-	UFUNCTION(BlueprintCallable)
-		void DrawMiniMap();
+	//UFUNCTION(BlueprintCallable)
+	//void DrawMiniMap();
 
 
 protected:
-	UPROPERTY(EditDefaultsOnly)
-		TSubclassOf<class UUserWidget> MainMenuClass;
+	//UPROPERTY(EditDefaultsOnly)
+	//TSubclassOf<class UUserWidget> MainMenuClass;
 
 	// Keep a pointer to be able to hide it
-	UPROPERTY()
-		class UUserWidget* MainMenu;
+	//UPROPERTY()
+	//class UUserWidget* MainMenu;
 
 
 public:

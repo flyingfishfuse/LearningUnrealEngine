@@ -229,27 +229,6 @@ void AlearningGameMode::HandleNewState(EGamePlayState NewState)
 
 
 /*
-Jumps the player to a different level starting point
-*/
-//void AlearningGameMode::JumptoLevel(const FString& LevelName)
-//{
-//	UE_LOG(LogBasic,Warning,TEXT("[DEBUG]AlearningGameMode::JumptoLevel %ls"),*LevelName);
-//	UGameplayStatics::OpenLevel(this, FName(*LevelName), false);
-//}
-
-
-/*
-Restarts the current level
-*/
-//void AlearningGameMode::RestartLevel()
-//{
-//	print("restarting level")
-//	UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::RestartLevel"));
-//	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
-//}
-
-
-/*
 RestartPlayer is a method that already exists within the GameModeBase class.
 It tries to spawn the player's Pawn at the location returned by FindPlayerStart.
 */
@@ -272,6 +251,7 @@ void AlearningGameMode::PlayerDied(ACharacter* Character)
 	//Get a reference to our Character's Player Controller
 	print("you died!")
 	UE_LOG(LogBasic,Warning,TEXT("[+] AlearningGameMode::PlayerDied "));
+	// get the players controller reference
 	AController* CharacterController = Character->GetController();
 	RespawnPlayer(CharacterController);
 }
@@ -290,89 +270,15 @@ APlayerController* AlearningGameMode::GetFirstPlayerController()
 	return PlayerController;
 }
 
-
 /*
- * Disables Controller Input for whatever reason you need
- * Created initially for preventing firing the weapon in the menu
- * Can be used for cutscenes
- */
-/*
-void AlearningGameMode::DisableFirstPlayerController()
-{
-	UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::DisableFirstPlayerController "));
-	//	GetWorld() is a reference to world
-	//	second parameter is the index of player which you want.
-	//	In this case 0 means the first player
-	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
-	PlayerPawn->DisableInput(PlayerController);
+Gets the string representation of a UUserWidget name
+*/
+FString AlearningGameMode::GetWidgetName(TSubclassOf<UUserWidget> WidgetObject) {
+	// for printing the widget name?
+	new FString;
+	const FString WidgetName = WidgetObject->GetFName().ToString();
+	return WidgetName;
 }
-
-
-/*
- * Re Enables Inpuit For whatever reason you need
- * Initially created for Re Enabling Input after leaving menu
- * Can be used for cutscenes
- */
-/*
-void AlearningGameMode::ReEnableFirstPlayerController()
-{
-	UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::ReEnableFirstPlayerController"));
-	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
-	PlayerPawn->EnableInput(PlayerController);
-}
-*/
-
-/*
-* I always suggest people to use the HUD class for this.That’s exactly what it 
-was made for. Instead of creating the widget in the GameMode, you can create 
-it in the HUD class.You can even create a more generalized function that 
-creates widgets, and stores them in an array, or a dictionary. Anyways, 
-so the HUD class has a reference to the score widget, now if you want to 
-access it, you can do it like this :
-*/
-//goes in an .h file
-//UUserWidget* MyScoreWidget;
-
-// goes in the corresponding .cpp file
-//MyScoreWidget = CreateWidget<UUserWidget>(...);
-
-/* Get the first player controller's HUD. In a networking environment
-only available client side.
-*/
-//void AlearningGameMode::GetFirstPlayersHUD()
-//{
-//	AlearningHUD* MyHUD = GetWorld()->GetFirstPlayerController()->GetHUD();
-//}
-
-
-/*
- * Gets the reference to a Blueprint UserWidget
- * Primarily used in the ChangeMenuWidget() function to set game state
- * 
- */
-//void AlearningGameMode::GetWidgetReference()
-//{
-	/*
-	* Lets assume your widget BP is called TestWidget and is located under
-	/Content/Widgets/TestWidget
-	Then you would do:
-	 */
-	
-	//TSubclassOf<class UUserWidget> TestWidgetClass = WidgetClassRef.TryLoadClass<UUserWidget>();
-	/*
-	
-	// ... then to display you widget do
-
-	// Check if class was found
-	if (TestWidgetClass )
-	{
-	}
-	 */
-//}
-
-
 /*Used to change the UMG UI widget currently being displayed,
 
 Use AFTER ShowPauseMenu() or AFTER ShowMainMenu()

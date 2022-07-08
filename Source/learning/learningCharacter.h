@@ -6,10 +6,10 @@
 #include "GameFramework/Character.h"
 
 // minimap things
-//#include "Minimap/Public/MapEnums.h"
-//#include "Minimap/Public/MapIconComponent.h"
-//#include "Minimap/Public/MapViewComponent.h"
-//#include "Minimap/Public/MapRevealerComponent.h"
+//#include "MapEnums.h"
+//#include "MapIconComponent.h"
+//#include "MapViewComponent.h"
+//#include "MapRevealerComponent.h"
 
 // as always, load the .generated file last
 #include "learningCharacter.generated.h"
@@ -23,9 +23,10 @@ class UAnimMontage;
 class USoundBase;
 
 // minimap
-class UMapViewComponent;
-class UMapIconComponent;
-class UMapFogRevealerComponent;
+//class UDialogueTree;
+//class UMapViewComponent;
+//class UMapIconComponent;
+//class UMapFogRevealerComponent;
 
 UCLASS(config=Game)
 class AlearningCharacter : public ACharacter
@@ -52,6 +53,21 @@ protected:
 
 	//Call Gamemode class to Restart Player Character.
 	void CallRestartPlayer();
+	
+/*=============================================================================
+	UMG MINIMAP
+=============================================================================*/
+private:
+	// This is all thats required if you have the widget drawn via BP
+	// This causes the minimap to be centered on the player and move with you
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	//class UMapViewComponent* MapView;
+	
+	//=========================================================================
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	//class UMapIconComponent* MapIcon;
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	//class UMapRevealerComponent* MapRevealer;
 
 /*=============================================================================
 	CAMERA AND GUN
@@ -171,23 +187,5 @@ protected:
 	void EndTouch(const ETouchIndex::Type FingerIndex, const FVector Location);
 	void TouchUpdate(const ETouchIndex::Type FingerIndex, const FVector Location);
 	TouchData	TouchItem;
-
-
-/*=============================================================================
-	UMG MINIMAP
-=============================================================================*/
-private:
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	//class UMapViewComponent* MapView;
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	//class UMapIconComponent* MapIcon;
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	//class UMapRevealerComponent* MapRevealer;
-
-/*=============================================================================
-	UMG
-=============================================================================*/
-	//UFUNCTION(BlueprintCallable, Category = "HUD")
-	//class AHUD* GetHUD() const;
-
+	
 };
