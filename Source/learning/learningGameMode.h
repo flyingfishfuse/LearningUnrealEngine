@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "Blueprint/UserWidget.h"
+#include "LearningGameInstance.h"
 //#include "MainPlayerController.h"
 //#include "Kismet/GameplayStatics.h"
 
@@ -15,18 +16,15 @@
 
 // This always goes last
 #include "learningGameMode.generated.h"
-
-
 // LOGGING
 //As long as you have CoreMinimal included then you shouldn't have to include 
 //anything specific for logging. Just declaring your logging class correctly 
 // will enable UE_LOG.
 
 //In your header, after the include section put :
-DECLARE_LOG_CATEGORY_EXTERN(LogBasic, Log, All);
+//DECLARE_LOG_CATEGORY_EXTERN(LogBasic, Log, All);
 
-//This a trick for easy print debug, you can use this MACRO at the begin of your cpp
-#define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::White,text);
+
 //then you can use a regular lovely print(); inside to all.
 //To prevent your screen from being flooded, you can change the first 
 //parameter, key, to a positive number.Any message printed with that key will 
@@ -67,22 +65,22 @@ The UE_LOG macro accepts a minimum of three parameters:
 UENUM()
 enum class EGamePlayState
 {
-	EPlaying,
+    EPlaying,
     EDead,
     EInMainMenu,
     EPaused,
-	EGameOver,
+    EGameOver,
     ECheating,
-	EUnknown
+    EUnknown
 };
 // strings to map to enum for logging and error handling
-static const char * EGamePlayStateStrings[] = { "EPlaying",
-												"EDead",
-												"EInMainMenu",
-												"EPaused",
-												"EGameOver",
-												"ECheating",
-												"EUnknown"
+static const char* EGamePlayStateStrings[] = { "EPlaying",
+                                                "EDead",
+                                                "EInMainMenu",
+                                                "EPaused",
+                                                "EGameOver",
+                                                "ECheating",
+                                                "EUnknown"
 };
 
 /*
@@ -92,38 +90,38 @@ static const char * EGamePlayStateStrings[] = { "EPlaying",
  *
  * Used to tie BluePrints to code
  */
-inline const char * GetGameStateString( EGamePlayState EnumMember)
+inline const char* GetGameStateString(EGamePlayState EnumMember)
 {
-	//const int IndexOfEnum =  int(EnumMember);
-	return EGamePlayStateStrings[int(EnumMember)];//IndexOfEnum];
+    //const int IndexOfEnum =  int(EnumMember);
+    return EGamePlayStateStrings[int(EnumMember)];//IndexOfEnum];
 };
 /*
  * Gets eGamePlayState by index
  */
-//inline int GetEnumGamePlayStateByIndex(int EnumIndex)
-//{
-//	return static_cast<EGamePlayState>(EnumIndex);
-//}
-/*
- * Magic numbers! YAY!
- * I couldnt get anyone to help me figure out how to get a reference to
- * UserWidget Blueprints without HARDCODED PATHS so yeah, thank you.
- * 
- */
-/*struct class EWidgetList
-{
-	MainMenu = "/learning/Content/FirstPerson/MainMenu",
-	NewGameMenu = "/learning/Content/FirstPerson/NewGameMenu",
-	PauseMenu = "/learning/Content/FirstPerson/PauseMenu",
-	DevMenu = "/learning/Content/FirstPerson/DevMenu",
-	LoadGameMenu = "/learning/Content/FirstPerson/LoadGameMenu",
-	SaveGameMenu = "/learning/Content/FirstPerson/SaveGameMenu",
-	SettingsMenu = "/learning/Content/FirstPerson/SettingsMenu",
-	
-	
-};
-*/
-// Delegate for Respawning a character
+ //inline int GetEnumGamePlayStateByIndex(int EnumIndex)
+ //{
+ //	return static_cast<EGamePlayState>(EnumIndex);
+ //}
+ /*
+  * Magic numbers! YAY!
+  * I couldnt get anyone to help me figure out how to get a reference to
+  * UserWidget Blueprints without HARDCODED PATHS so yeah, thank you.
+  *
+  */
+  /*struct class EWidgetList
+  {
+      MainMenu = "/learning/Content/FirstPerson/MainMenu",
+      NewGameMenu = "/learning/Content/FirstPerson/NewGameMenu",
+      PauseMenu = "/learning/Content/FirstPerson/PauseMenu",
+      DevMenu = "/learning/Content/FirstPerson/DevMenu",
+      LoadGameMenu = "/learning/Content/FirstPerson/LoadGameMenu",
+      SaveGameMenu = "/learning/Content/FirstPerson/SaveGameMenu",
+      SettingsMenu = "/learning/Content/FirstPerson/SettingsMenu",
+
+
+  };
+  */
+  // Delegate for Respawning a character
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerDiedSignature, ACharacter*, Character);
 
 UCLASS()
@@ -142,13 +140,19 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Internals")
     APlayerController* ThePlayerController;
 
+    // Delegate function signature binding
+    const FOnPlayerDiedSignature& GetOnPlayerDied()	const { return OnPlayerDied; }
+
+    //Signature to bind delegate. 
+    UPROPERTY()
+    FOnPlayerDiedSignature OnPlayerDied;
 
     //virtual void Tick(float DeltaTime);// override;
 
 protected:
     /** Called when the game starts. */
     virtual void BeginPlay() override;
-	
+
 /*=============================================================================
     UMG/MENU MECHANICS
 =============================================================================*/
@@ -157,8 +161,9 @@ public:
     UFUNCTION(BlueprintCallable, Category = "UMG Functions")
     void ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass);
 
-    UFUNCTION(BlueprintCallable, Category = "UMG Functions")
-        FString GetWidgetName(TSubclassOf<UUserWidget> WidgetObject);
+    // TODO: figure out why this doesnt work as intended
+    //UFUNCTION(BlueprintCallable, Category = "UMG Functions")
+    //FString GetWidgetName(TSubclassOf<UUserWidget> WidgetObject);
 
     /*https://nerivec.github.io/old-ue4-wiki/pages/umg-referencing-umg-widgets-in-code.html*/
     // Reference UMG Asset in the Editor
@@ -186,28 +191,35 @@ protected:
     UPROPERTY()
     UUserWidget* CurrentWidget;
 
- 
-/*=============================================================================
-    UTILITY
-=============================================================================*/
-//public:
-    //void MapEnumToString(enum GamePlayState);
+    //virtual void CoOpPlayerSpawn(APlayerController* NewPlayer) override;
 
-    //void MapStringToEnum()
+//private:
+
+	/*Gets reference to a widget*/
+	//void GetWidgetReference();
+
+    /*=============================================================================
+        GAME MECHANICS INTERNALS
+            level changes
+            death mechanics
+    =============================================================================*/
+    /** Returns the current playing state */
+    UFUNCTION(BlueprintCallable, Category = "Game Mechanics")
+        EGamePlayState GetCurrentState() const;
 
 
-/*=============================================================================
-    GAME MECHANICS INTERNALS
-        level changes
-        death mechanics
-=============================================================================*/
-public:
-	/** Returns the current playing state */
-	UFUNCTION(BlueprintCallable, Category = "Game Mechanics")
-	EGamePlayState GetCurrentState() const;
+    UFUNCTION(BlueprintCallable, Category = "Game Mechanics")
+        void BPSetCurrentState(int NewState);
 
-	/*
-    Blueprint function for setting a new play state 
+    /**
+    Internally used function for setting a new playing state INTERNALLY
+    Enums are not valid parameters for blueprints
+    */
+    //SetCurrentState(EGamePlayState NewState)
+    void SetCurrentState(EGamePlayState NewState);
+
+    /*
+    Blueprint function for setting a new play state
     Currently the EGamePlayState declaration is
     enum class EGamePlayState
     {
@@ -220,59 +232,48 @@ public:
         EUnknown
     };
     */
-    UFUNCTION(BlueprintCallable, Category = "Game Mechanics")
-    void BPSetCurrentState(int NewState);
+    //Tries to Spawn the player's pawn.
+    virtual void RespawnPlayer(AController* NewPlayer);
 
-    /** 
-    Internally used function for setting a new playing state INTERNALLY 
-    Enums are not valid parameters for blueprints
-    */
-	//SetCurrentState(EGamePlayState NewState)
-	void SetCurrentState(EGamePlayState NewState);
+protected:
+
+    /*=============================================================================
+        UTILITY
+    =============================================================================*/
+    //public:
+    //void MapEnumToString(enum GamePlayState);
+
+    //void MapStringToEnum()
+
+
+    //UFUNCTION(BlueprintCallable,Category="Game Mechanics")
+    //void DisableFirstPlayerController();
+
+    //UFUNCTION(BlueprintCallable,Category="Game Mechanics")
+    //void ReEnableFirstPlayerController();
+
+    //Called when Player character has died.
+    UFUNCTION()
+    virtual void PlayerDied(ACharacter* Character);
+
+
+    // less verbose method for getting player controller
+    APlayerController* GetFirstPlayerController();
+
+    /**Keeps track of the current playing state */
+    EGamePlayState CurrentState;
+
+    /**Handle any function calls that rely upon changing the playing state of our game */
+    void HandleNewState(EGamePlayState NewState);
 
     /*Opens a level, loading assets as if newly visited*/
     //UFUNCTION(BlueprintCallable, Category = "Game Mechanics")
     //void JumptoLevel(const FString& LevelName);
 
-	/*Restarts the level, Loads assets af if new*/
+    /*Restarts the level, Loads assets af if new*/
     //UFUNCTION(BlueprintCallable, Category = "Game Mechanics")
     //void RestartLevel();
 
-	// Delegate function signature binding
-    const FOnPlayerDiedSignature& GetOnPlayerDied()	const { return OnPlayerDied; }
-
-    //Tries to Spawn the player's pawn.
-    virtual void RespawnPlayer(AController* NewPlayer);
-
-	//UFUNCTION(BlueprintCallable,Category="Game Mechanics")
-	//void DisableFirstPlayerController();
-
-	//UFUNCTION(BlueprintCallable,Category="Game Mechanics")
-	//void ReEnableFirstPlayerController();
-	
-protected:
-    //Called when Player character has died.
-    UFUNCTION()
-    virtual void PlayerDied(ACharacter* Character);
-
-    //Signature to bind delegate. 
-    UPROPERTY()
-    FOnPlayerDiedSignature OnPlayerDied;
-	
-    //virtual void CoOpPlayerSpawn(APlayerController* NewPlayer) override;
-
-    // less verbose method for getting player controller
-    APlayerController* GetFirstPlayerController();
-
-//private:
-	/**Keeps track of the current playing state */
-	EGamePlayState CurrentState;
-
-	/**Handle any function calls that rely upon changing the playing state of our game */
-	void HandleNewState(EGamePlayState NewState);
-
-	/*Gets reference to a widget*/
-	//void GetWidgetReference();
 };
 
 

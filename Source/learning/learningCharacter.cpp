@@ -12,10 +12,10 @@
 #include "MotionControllerComponent.h"
 
 
-//#include "MapEnums.h"
-//#include "MapIconComponent.h"
-//#include "MapViewComponent.h"
-//#include "MapRevealerComponent.h"
+#include "MapEnums.h"
+#include "MapIconComponent.h"
+#include "MapViewComponent.h"
+#include "MapRevealerComponent.h"
 
 #include "learningGameMode.h"
 #include "XRMotionControllerBase.h" // for FXRMotionControllerBase::RightHandSourceId
@@ -40,7 +40,7 @@ AlearningCharacter::AlearningCharacter()
 	/* 
 		MapIconComponent makes the character appear on the minimap
 	*/
-	/*
+	
 	static ConstructorHelpers::FObjectFinder<UTexture2D> PlayerIcon(TEXT("/MinimapPlugin/Textures/Icons/T_Icon_Placeholder"));
 	MapIcon = CreateDefaultSubobject<UMapIconComponent>(TEXT("MapIcon"));
 	MapIcon->SetupAttachment(GetRootComponent());
@@ -50,13 +50,13 @@ AlearningCharacter::AlearningCharacter()
 	
 	// The icon will rotate to represent the character's rotation
 	MapIcon->SetIconRotates(true);
-	*/
+	
 
 	/* 
 		MapViewComponent allows the minimap to follow the character
 	*/
 	
-	/*
+	
 	MapView = CreateDefaultSubobject<UMapViewComponent>(TEXT("MapView"));
 	MapView->SetupAttachment(GetRootComponent());
 	
@@ -67,14 +67,14 @@ AlearningCharacter::AlearningCharacter()
 	MapView->RotationMode = EMapViewRotationMode::UseFixedRotation;
 	
 	// The axis that represents the depth-direction for side scrolling
-	MapView->FixedRotation = SidescrollRotation;
-	MapView->SetRelativeRotation(SidescrollRotation.Quaternion());
-	*/
+	//MapView->FixedRotation = SidescrollRotation;
+	//MapView->SetRelativeRotation(SidescrollRotation.Quaternion());
+	
 	
 	/*
 		MapRevealerComponent makes the character reveal fog
 	*/
-	/*
+	
 	MapRevealer = CreateDefaultSubobject<UMapRevealerComponent>(TEXT("MapRevealer"));
 	MapRevealer->SetupAttachment(GetRootComponent());
 	
@@ -84,7 +84,7 @@ AlearningCharacter::AlearningCharacter()
 	
 	// Reveal temporarily to make areas hidden again after leaving. Reveal permanently to make areas explored forever.
 	MapRevealer->SetRevealMode(EMapFogRevealMode::Temporary);
-	*/
+	
 
 	/*=============================================================================
 	CAMERA AND GUN VIEW

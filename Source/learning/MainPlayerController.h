@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "LearningGameInstance.h"
 #include "MainPlayerController.generated.h"
 
 /**
@@ -13,10 +14,20 @@ UCLASS()
 class LEARNING_API AMainPlayerController : public APlayerController
 {
 	GENERATED_BODY()
+
 public:
 	virtual void BeginPlay() override;
+	
+	// less verbose method for getting player controller
+	APlayerController* GetFirstPlayerController();
+
+	UFUNCTION(BlueprintCallable,Category="Input Mode")
+	void SetPlayerInputGameOnly(APlayerController* PlayerController);
+	
+	UFUNCTION(BlueprintCallable,Category="Input Mode")
+	void SetPlayerInputMenu(APlayerController* PlayerController);
+};
 /*
-protected:
 	void AMainPlayerController::Disable()
 	{
 		DisableInput(Cast<APlayerController>(this));
@@ -27,4 +38,3 @@ protected:
 		EnableInput(Cast<APlayerController>(this));
 	}
 	*/
-};

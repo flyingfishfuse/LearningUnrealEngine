@@ -6,10 +6,10 @@
 #include "GameFramework/Character.h"
 
 // minimap things
-//#include "MapEnums.h"
-//#include "MapIconComponent.h"
-//#include "MapViewComponent.h"
-//#include "MapRevealerComponent.h"
+#include "MapEnums.h"
+#include "MapIconComponent.h"
+#include "MapViewComponent.h"
+#include "MapRevealerComponent.h"
 
 // as always, load the .generated file last
 #include "learningCharacter.generated.h"
@@ -24,8 +24,8 @@ class USoundBase;
 
 // minimap
 //class UDialogueTree;
-//class UMapViewComponent;
-//class UMapIconComponent;
+class UMapViewComponent;
+class UMapIconComponent;
 //class UMapFogRevealerComponent;
 
 UCLASS(config=Game)
@@ -60,14 +60,14 @@ protected:
 private:
 	// This is all thats required if you have the widget drawn via BP
 	// This causes the minimap to be centered on the player and move with you
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	//class UMapViewComponent* MapView;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class UMapViewComponent* MapView;
 	
 	//=========================================================================
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	//class UMapIconComponent* MapIcon;
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	//class UMapRevealerComponent* MapRevealer;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class UMapIconComponent* MapIcon;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class UMapRevealerComponent* MapRevealer;
 
 /*=============================================================================
 	CAMERA AND GUN
