@@ -41,14 +41,14 @@ This is a DANGEROUS line of code I saw on reddit I am keeping here to illustrate
     }
 
 
+this will allow you to set a widget in the editor
+
     // .h
     UUserWidget* MyScoreWidget;
 
     // .cpp
     MyScoreWidget = CreateWidget<UUserWidget>(...);
 
-
-this will allow you to set a widget in the editor
 
     // .h
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
