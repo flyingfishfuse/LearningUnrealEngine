@@ -12,6 +12,7 @@
 //#include "Blueprint/WidgetTree.h"
 #include "UObject/ConstructorHelpers.h"
 #include "LearningGameInstance.h"
+//#include "MainPlayerController.h"
 
 // second part of the complement in the .h file
 DEFINE_LOG_CATEGORY(LogBasic);
@@ -36,7 +37,7 @@ It will load StartingWidgetClass when game starts
 
 It will also set the current game state to "playing game"
 	as defined in the enum class EGamePlayState
-*/
+*/	
 void AlearningGameMode::BeginPlay()
 {
 	// when the game starts
@@ -68,8 +69,16 @@ void AlearningGameMode::BeginPlay()
 	{
 		// game is aware of the user being in main menu
 		UE_LOG(LogBasic, Warning, TEXT("[DEBUG] AlearningGameMode::BeginPlay -> Calling AlearningGameMode::SetCurrentState(EGamePlayState::EInMainMenu)"));
-		AlearningGameMode::SetCurrentState(EGamePlayState::EInMainMenu);
-		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::BeginPlay -> Calling ChangeMenuWidget "));
+		SetCurrentState(EGamePlayState::EInMainMenu);
+		// Set the input mode to allow the player to work with the menu
+		UE_LOG(LogBasic, Warning, TEXT("[DEBUG] AlearningGameMode::BeginPlay -> Calling AlearningGameMode::GetFirstPlayerController())"));
+		// Get the first players controller reference to enable menu mode
+		ThePlayerController = GetFirstPlayerController();
+		// Set the input mode with the reference
+		UE_LOG(LogBasic, Warning, TEXT("[DEBUG] AlearningGameMode::BeginPlay -> Calling AlearningGameMode::SetPlayerInputMenu(PlayerOneController)"));
+		SetPlayerInputMenu(ThePlayerController); 
+		// show the actual menu
+		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::BeginPlay -> Calling AlearningGameMode::ChangeMenuWidget "));
 		ChangeMenuWidget(StartingWidgetClass);
 	}
 	else
@@ -104,6 +113,32 @@ Gets the string representation of a UUserWidget name
 //	const FString WidgetName = WidgetObject->GetFName().ToString();
 //	return *WidgetName;
 //}
+
+/*
+Get a reference to the First Players Controller
+There is a UE method available in world.cpp But that
+requires two lines of code
+*/
+APlayerController* AlearningGameMode::GetFirstPlayerController()
+{
+	UE_LOG(LogBasic, Warning, TEXT("[DEBUG] AlearningGameMode::GetFirstPlayerController"));
+	//APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+	return PlayerController;
+}
+void AlearningGameMode::SetPlayerInputGameOnly(APlayerController* PlayerController)
+{
+	UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::SetPlayerInputGameOnly"));
+	PlayerController->SetInputMode(FInputModeGameOnly());
+}
+void AlearningGameMode::SetPlayerInputMenu(APlayerController* PlayerController){
+	//Data structure used to setup an input mode that allows the UI to respond
+	//to user input, and if the UI doesn't handle it player input / player
+	//controller gets a chance
+	UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::SetPlayerInputMenu"));
+	PlayerController->SetInputMode(FInputModeUIOnly());
+}
+
 /*Used to change the UMG UI widget currently being displayed,
 
 Use AFTER ShowPauseMenu() or AFTER ShowMainMenu()
@@ -287,18 +322,6 @@ void AlearningGameMode::HandleNewState(EGamePlayState NewState)
 		}
 }
 
-/*
-Get a reference to the First Players Controller
-There is a UE method available in world.cpp But that
-requires two lines of code
-*/
-APlayerController* AlearningGameMode::GetFirstPlayerController()
-{
-	UE_LOG(LogBasic, Warning, TEXT("[DEBUG] AlearningGameMode::GetFirstPlayerController"));
-	//APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
-	return PlayerController;
-}
 
 /*
 RestartPlayer is a method that already exists within the GameModeBase class.

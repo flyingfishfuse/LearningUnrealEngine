@@ -6,7 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "Blueprint/UserWidget.h"
 #include "LearningGameInstance.h"
-//#include "MainPlayerController.h"
+#include "MainPlayerController.h"
 //#include "Kismet/GameplayStatics.h"
 
 #include <string>
@@ -133,13 +133,6 @@ public:
 
 	AlearningGameMode();
 
-    // set pointer to PlayerCharacter
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Internals")
-    class AlearningCharacter* PlayerCharacter;
-    // set pointer to player controller
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Internals")
-    APlayerController* ThePlayerController;
-
     // Delegate function signature binding
     const FOnPlayerDiedSignature& GetOnPlayerDied()	const { return OnPlayerDied; }
 
@@ -147,6 +140,32 @@ public:
     UPROPERTY()
     FOnPlayerDiedSignature OnPlayerDied;
 
+/*=============================================================================
+        INTERNALS 
+ =============================================================================*/
+    
+    // set pointer to PlayerCharacter
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Internals")
+    class AlearningCharacter* PlayerCharacter;
+
+    // set pointer to player controller
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Internals")
+    APlayerController* ThePlayerController;
+
+    // less verbose method for getting player controller
+    APlayerController* GetFirstPlayerController();
+
+    UFUNCTION(BlueprintCallable,Category="Input Mode")
+    /*
+     * Sets the input mode to "game only"
+     */
+    void SetPlayerInputGameOnly(APlayerController* PlayerController);
+    
+    UFUNCTION(BlueprintCallable,Category="Input Mode")
+    /*
+     * Sets the input mode to "UI" for menu interaction
+     */
+    void SetPlayerInputMenu(APlayerController* PlayerController);
     //virtual void Tick(float DeltaTime);// override;
 
 protected:
@@ -256,10 +275,7 @@ protected:
     UFUNCTION()
     virtual void PlayerDied(ACharacter* Character);
 
-
-    // less verbose method for getting player controller
-    APlayerController* GetFirstPlayerController();
-
+    
     /**Keeps track of the current playing state */
     EGamePlayState CurrentState;
 

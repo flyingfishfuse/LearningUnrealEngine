@@ -19,13 +19,8 @@ public:
 	virtual void BeginPlay() override;
 	
 	// less verbose method for getting player controller
-	APlayerController* GetFirstPlayerController();
-
-	UFUNCTION(BlueprintCallable,Category="Input Mode")
-	void SetPlayerInputGameOnly(APlayerController* PlayerController);
+	//APlayerController* GetFirstPlayerController();
 	
-	UFUNCTION(BlueprintCallable,Category="Input Mode")
-	void SetPlayerInputMenu(APlayerController* PlayerController);
 };
 /*
 	void AMainPlayerController::Disable()
