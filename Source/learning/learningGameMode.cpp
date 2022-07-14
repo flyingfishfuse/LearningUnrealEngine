@@ -70,13 +70,6 @@ void AlearningGameMode::BeginPlay()
 		// game is aware of the user being in main menu
 		UE_LOG(LogBasic, Warning, TEXT("[DEBUG] AlearningGameMode::BeginPlay -> Calling AlearningGameMode::SetCurrentState(EGamePlayState::EInMainMenu)"));
 		SetCurrentState(EGamePlayState::EInMainMenu);
-		// Set the input mode to allow the player to work with the menu
-		UE_LOG(LogBasic, Warning, TEXT("[DEBUG] AlearningGameMode::BeginPlay -> Calling AlearningGameMode::GetFirstPlayerController())"));
-		// Get the first players controller reference to enable menu mode
-		ThePlayerController = GetFirstPlayerController();
-		// Set the input mode with the reference
-		UE_LOG(LogBasic, Warning, TEXT("[DEBUG] AlearningGameMode::BeginPlay -> Calling AlearningGameMode::SetPlayerInputMenu(PlayerOneController)"));
-		SetPlayerInputMenu(ThePlayerController); 
 		// show the actual menu
 		UE_LOG(LogBasic,Warning,TEXT("[DEBUG] AlearningGameMode::BeginPlay -> Calling AlearningGameMode::ChangeMenuWidget "));
 		ChangeMenuWidget(StartingWidgetClass);
@@ -252,6 +245,7 @@ void AlearningGameMode::BPSetCurrentState(int NewState)
 	case 2:
 		UE_LOG(LogBasic, Warning, TEXT("[DEBUG] AlearningGameInstance::BPSetCurrentState -> EInMainMenu"))
 			SetCurrentState(EGamePlayState::EInMainMenu);
+
 		break;
 	case 3:
 		UE_LOG(LogBasic, Warning, TEXT("[DEBUG] AlearningGameInstance::BPSetCurrentState -> EPaused "))
@@ -281,39 +275,76 @@ Main control flow for handling gameplay states
 */
 void AlearningGameMode::HandleNewState(EGamePlayState NewState)
 {
-	UE_LOG(LogBasic, Warning, TEXT("[DEBUG] AlearningGameInstance::HandleNewState"))
+	UE_LOG(LogBasic, Warning, TEXT("[DEBUG] AlearningGameMode::HandleNewState"))
 		switch (NewState)
 		{
+		/*
+		*	What do when game start!
+		*	 - Set Values on things and stuff
+		*	 - Get variables
+		* 
+		*/
 		case EGamePlayState::EPlaying:
-			UE_LOG(LogBasic, Warning, TEXT("[DEBUG] GameState Passed to AlearningGameInstance::HandleNewState == EGamePlayState::Playing"))
+			UE_LOG(LogBasic, Warning, TEXT("[DEBUG] GameState Passed to AlearningGameMode::HandleNewState == EGamePlayState::Playing"))
 				UE_LOG(LogBasic, Warning, TEXT("[DEBUG] Player Is Playing Game!"))
-				// Enable Input in the main control flow
+				// Enable Input for game play
+				SetPlayerInputGameOnly(ThePlayerController);				
 				//ReEnableFirstPlayerController();
 				// do nothing
 				break;
+		/*
+		 *	The MAIN MENU control flow
+		 *	 - turn off game mode input
+		 * 
+		 */
 		case EGamePlayState::EInMainMenu:
-			UE_LOG(LogBasic, Warning, TEXT("[DEBUG] GameState Passed to AlearningGameInstance::HandleNewState == EGamePlayState::EInMainMenu"));
+			UE_LOG(LogBasic, Warning, TEXT("[DEBUG] GameState Passed to AlearningGameMode::HandleNewState == EGamePlayState::EInMainMenu"));
+			// Set the input mode to allow the player to work with the menu
+			UE_LOG(LogBasic, Warning, TEXT("[DEBUG] AlearningGameMode::BeginPlay -> Calling AlearningGameMode::GetFirstPlayerController())"));
+			// Get the first players controller reference to enable menu mode
+			ThePlayerController = GetFirstPlayerController();
+			// Set the input mode with the reference
+			UE_LOG(LogBasic, Warning, TEXT("[DEBUG] AlearningGameMode::BeginPlay -> Calling AlearningGameMode::SetPlayerInputMenu(PlayerOneController)"));
+			SetPlayerInputMenu(ThePlayerController); 
 			// if the character is in the main menu, we want to disable player input
 			// so they cannot fire or move
 			//DisableFirstPlayerController();
 			break;
+		/*
+		*	What do when ded!
+		* 
+		*/
 		case EGamePlayState::EDead:
-			UE_LOG(LogBasic, Warning, TEXT("[DEBUG] GameState Passed to AlearningGameInstance::HandleNewState == EGamePlayState::EDead"));
+			UE_LOG(LogBasic, Warning, TEXT("[DEBUG] GameState Passed to AlearningGameMode::HandleNewState == EGamePlayState::EDead"));
 			UE_LOG(LogBasic, Warning, TEXT("[DEBUG] Game says Player Died! Respawning Player!"));
 			RespawnPlayer(AlearningGameMode::GetFirstPlayerController());
 			break;
+		/*
+		*	What do when game is over!
+		*	 - clean up and save things!
+		* 
+		*/
 		case EGamePlayState::EGameOver:
-			UE_LOG(LogBasic, Warning, TEXT("[DEBUG] GameState Passed to AlearningGameInstance::HandleNewState == EGamePlayState::EGameOver"));
+			UE_LOG(LogBasic, Warning, TEXT("[DEBUG] GameState Passed to AlearningGameMode::HandleNewState == EGamePlayState::EGameOver"));
 			UE_LOG(LogBasic, Warning, TEXT("[DEBUG] Game says GAME OVER! Loss conditions met! Restarting world and loading main menu!"));
 			UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 			// TODO: implement main menu base widget!
 			//ChangeMenuWidget(wMainMenu);
 			break;
+		/*
+		*	What do when cheating!
+		*		- turn off achievments!
+		*		- turn on reality core mode!
+		*/
 		case EGamePlayState::ECheating:
 			UE_LOG(LogBasic, Warning, TEXT("[DEBUG] Player is confirmed as cheating, applying punishment!"))
 				break;
+		/*
+		*	shit broke! do something!
+		* 
+		*/
 		case EGamePlayState::EUnknown:
-			UE_LOG(LogBasic, Warning, TEXT("[DEBUG] GameState Passed to AlearningGameInstance::HandleNewState == EGamePlayState::Unknown"));
+			UE_LOG(LogBasic, Warning, TEXT("[DEBUG] GameState Passed to AlearningGameMode::HandleNewState == EGamePlayState::Unknown"));
 			break;
 			// Unknown/default state
 		default:

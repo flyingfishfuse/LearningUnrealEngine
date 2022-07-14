@@ -153,18 +153,20 @@ public:
     APlayerController* ThePlayerController;
 
     // less verbose method for getting player controller
+    //UFUNCTION(BlueprintCallable,Category="Input Mode")
     APlayerController* GetFirstPlayerController();
 
-    UFUNCTION(BlueprintCallable,Category="Input Mode")
     /*
-     * Sets the input mode to "game only"
+     * LearningGameMode Method for setting the input mode to "game only"
      */
+    //UFUNCTION(BlueprintCallable,Category="Input Mode")
     void SetPlayerInputGameOnly(APlayerController* PlayerController);
     
-    UFUNCTION(BlueprintCallable,Category="Input Mode")
+    
     /*
-     * Sets the input mode to "UI" for menu interaction
+     * LearningGameMode Method for setting the input mode to "UI" for menu interaction
      */
+    UFUNCTION(BlueprintCallable,Category="Input Mode")    
     void SetPlayerInputMenu(APlayerController* PlayerController);
     //virtual void Tick(float DeltaTime);// override;
 
